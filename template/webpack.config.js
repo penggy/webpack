@@ -2,10 +2,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
-
-const isDev = process.env.NODE_ENV !== 'production';
 
 function resolve(dir) {
   return path.resolve(__dirname, dir)
@@ -18,7 +17,7 @@ module.exports = {
   output: {
     path: resolve('dist'),
     chunkFilename: 'js/[name].[chunkhash:8].js',
-    filename: `js/[name]${isDev ? '' : '.[chunkhash:8]'}.js`
+    filename: `js/[name].[chunkhash:8].js`
   },
   externals: {
     jquery: 'window.$'
@@ -76,16 +75,14 @@ module.exports = {
         fallback: "style-loader",
         use: "css-loader"
       })
-    },
-    {
+    }, {
       test: /\.less$/,
       use: ExtractTextPlugin.extract({
         publicPath: "../",
         fallback: "style-loader",
         use: "css-loader!less-loader"
       })
-    },
-    {
+    }, {
       test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
       loader: 'url-loader',
       options: {
@@ -93,8 +90,7 @@ module.exports = {
         limit: 10000,
         name: "[name].[hash:8].[ext]"
       }
-    },
-    {
+    }, {
       test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
       loader: 'url-loader',
       options: {
@@ -102,8 +98,7 @@ module.exports = {
         limit: 10000,
         name: "[name].[hash:8].[ext]"
       }
-    },
-    {
+    }, {
       test: /\.(swf|mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
       loader: 'url-loader',
       options: {
@@ -125,6 +120,12 @@ module.exports = {
       { from: 'externals' }
     ]),
     new ExtractTextPlugin('css/[name].[chunkhash:8].css'),
+    new OptimizeCssAssetsPlugin({
+      assetNameRegExp: /\.css$/g,
+      cssProcessor: require('cssnano'),
+      cssProcessorOptions: { discardComments: { removeAll: true } },
+      canPrint: true
+    }),    
     new HtmlWebpackPlugin({
       filename: 'index.html',
       title: '{{ name }}',
@@ -146,6 +147,7 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
+      comments: false,
       compress: {
         warnings: false
       }
