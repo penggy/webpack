@@ -2,15 +2,15 @@
 
 > {{ description }}
 
-## Build Setup
+## 编译步骤
 
 ``` bash
-# install dependencies
+# 安装依赖库
 npm install
 
-# serve with hot reload at localhost:8080
+# 以开发模式启动
 npm run start
 
-# build for production with minification
+# 编译发布包
 npm run build
 ```
