@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --open",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "deploy": "cross-env NODE_ENV=production gh-pages -d dist"
   },
   "dependencies": {
     "babel-core": "6.26.0",
