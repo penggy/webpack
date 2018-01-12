@@ -19,6 +19,9 @@ module.exports = {
     chunkFilename: 'js/[name].[chunkhash:8].js',
     filename: `js/[name].[chunkhash:8].js`
   },
+  externals: {
+    jquery: '$'
+  },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
@@ -46,12 +49,6 @@ module.exports = {
   },
   module: {
     rules: [{
-        test: require.resolve('jquery'),
-        use: [{
-            loader: 'expose-loader',
-            options: '$'
-        }]
-    }, {
       test: /\.js$/,
       loader: 'babel-loader',
       include: __dirname,
